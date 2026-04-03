@@ -18,4 +18,10 @@ interface LocationDAO{
     // getting all tags
     @Query("SELECT tags FROM locations")
     suspend fun getAllTags(): List<String>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLocations(locations: List<LocationEntity>)
+
+    @Query("SELECT * FROM locations")
+    suspend fun getAllLocations(): List<LocationEntity>
 }
