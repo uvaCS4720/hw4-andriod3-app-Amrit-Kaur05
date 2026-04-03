@@ -1,5 +1,6 @@
 package edu.nd.pmcburne.hello
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,49 +49,54 @@ class MainViewModel(
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
-            // use retrofit to get JSON
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://www.cs.virginia.edu/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            val api = retrofit.create(ApiUVAService::class.java)
+            try {
+                // use retrofit to get JSON
+                val retrofit = Retrofit.Builder()
+                    .baseUrl("https://www.cs.virginia.edu/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                val api = retrofit.create(ApiUVAService::class.java)
 
-            // get JSON
-            val responseList = api.getPlacemarks()
+                // get JSON
+                val responseList = api.getPlacemarks()
 
-            // insert JSON into database after converting
-            val entities = responseList.map { json ->
-                LocationEntity(
-                    id = json.id,
-                    name = json.name,
-                    description = json.description,
-                    latitude = json.visual_center.latitude,
-                    longitude = json.visual_center.longitude,
-                    tags = json.tag_list.joinToString(",")
-                )
-            }
+                // insert JSON into database after converting
+                val entities = responseList.map { json ->
+                    LocationEntity(
+                        id = json.id,
+                        name = json.name,
+                        description = json.description,
+                        latitude = json.visual_center.latitude,
+                        longitude = json.visual_center.longitude,
+                        tags = json.tag_list.joinToString(",")
+                    )
+                }
 
-            // saving to database
-            dao.insertLocations(entities)
+                // saving to database
+                dao.insertLocations(entities)
 
-            // getting location info from database
-            val dbLocations = dao.getAllLocations()
+                // getting location info from database
+                val dbLocations = dao.getAllLocations()
 
-            // sorting for unique tags
-            val uniqueSortedTags = dbLocations
-                .flatMap { it.tags.split(",") }
-                .map { it.trim() }
-                .filter { it.isNotEmpty() }
-                .distinct()
-                .sorted()
+                // sorting for unique tags
+                val uniqueSortedTags = dbLocations
+                    .flatMap { it.tags.split(",") }
+                    .map { it.trim() }
+                    .filter { it.isNotEmpty() }
+                    .distinct()
+                    .sorted()
 
-            // updating UI with new database info
-            _uiState.update { currentState ->
-                currentState.copy(
-                    locations = dbLocations,
-                    allTags = uniqueSortedTags,
-                    isLoading = false
-                )
+                // updating UI with new database info
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        locations = dbLocations,
+                        allTags = uniqueSortedTags,
+                        isLoading = false
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Error fetching data: ${e.message}")
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }

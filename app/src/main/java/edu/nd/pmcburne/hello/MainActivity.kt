@@ -80,7 +80,7 @@ fun MainScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    Column(modifier = modifier) {
+    Column(modifier = modifier.fillMaxSize()) {
 //        Text(
 //            "Welcome to the Counter App!"
 //        )
@@ -102,7 +102,9 @@ fun MainScreen(
             }
         ) {
             // filtering markers by selected tag
-            uiState.locations.filter{it.tags.contains(uiState.selectedTag)}.forEach{location ->
+            uiState.locations.filter { location ->
+                location.tags.split(",").map { it.trim() }.contains(uiState.selectedTag)
+            }.forEach{location ->
                 Marker(
                     state = MarkerState(position = LatLng(location.latitude, location.longitude)),
                     title = location.name,
