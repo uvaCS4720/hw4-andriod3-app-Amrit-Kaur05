@@ -6,6 +6,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
+// Citation:
+// Learning more about DAO with Room: https://developer.android.com/training/data-storage/room/accessing-data
+
 @Dao
 interface LocationDAO{
     @Insert(onConflict = OnConflictStrategy.REPLACE)

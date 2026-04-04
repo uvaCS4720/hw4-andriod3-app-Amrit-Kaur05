@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -42,6 +44,20 @@ android {
 }
 
 dependencies {
+//implementation(libs.androidx.room3.runtime)
+    //    val room3Version = "3.0.0-alpha02"
+//
+//    implementation("androidx.room3:room3-runtime:$room3Version")
+//    implementation("androidx.room3:room3-ktx:$room3Version")
+//    ksp("androidx.room3:room3-compiler:$room3Version")
+
+//    val room3Version = "2.7.0-alpha01"
+//
+//    implementation("androidx.room:room-runtime:$room3Version")
+//    implementation("androidx.room:room-ktx:$room3Version")
+//    ksp("androidx.room:room-compiler:$room3Version")
+//    implementation("androidx.room:room-common:$room3Version")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -50,6 +66,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.room3.common.jvm)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -57,4 +74,16 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation("androidx.room:room-runtime:2.7.0")
+    implementation("androidx.room:room-ktx:2.7.0")
+    ksp("androidx.room:room-compiler:2.7.0")
+
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    implementation("com.google.maps.android:maps-compose:6.1.0")
+    implementation("com.google.maps.android:maps-compose-utils:6.1.0")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
 }

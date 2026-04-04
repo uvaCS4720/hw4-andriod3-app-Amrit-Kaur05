@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 data class MainUIState(
-//    val counterValue: Int
     val locations: List<LocationEntity> = emptyList(),
     val selectedTag: String = "core",
     val allTags: List<String> = emptyList(),
@@ -21,28 +21,16 @@ data class MainUIState(
 )
 
 class MainViewModel(
-//    val initialCounterValue: Int = 0
     private val dao: LocationDAO
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MainUIState())
     val uiState: StateFlow<MainUIState> = _uiState.asStateFlow()
 
-//    fun incrementCounter() {
-//        _uiState.update{ currentState ->
-//            currentState.copy(counterValue = _uiState.value.counterValue + 1)
-//        }
-//    }
 
     // on start-up, pull from API
     init {
         fetchAndSyncData()
     }
-
-//    fun decrementCounter() {
-//        _uiState.update{ currentState ->
-//            currentState.copy(counterValue = _uiState.value.counterValue - 1)
-//        }
-//    }
 
     private fun fetchAndSyncData(){
         // making a loader spinner
@@ -101,16 +89,6 @@ class MainViewModel(
         }
     }
 
-//    fun resetCounter() {
-//        _uiState.update { currentState ->
-//            currentState.copy(counterValue = 0)
-//        }
-//    }
-
-//    val isDecrementEnabled: Boolean
-//        get() = _uiState.value.counterValue > 0
-//    val isResetEnabled: Boolean
-//        get() = _uiState.value.counterValue > 0
 
     fun updateFilter(newTag: String){
         _uiState.update { it.copy(selectedTag = newTag)}
